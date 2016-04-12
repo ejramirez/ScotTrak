@@ -5,8 +5,16 @@
  */
 package GUI;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import scottrak.Classes.Individual;
@@ -32,6 +40,16 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         mod1 = (DefaultTableModel) IndividualTable.getModel();
         mod2 = (DefaultTableModel) CorpOrgTable.getModel();
         
+        //Need Timer For this
+        /*
+        System.out.println(jTabbedPane1.getSelectedIndex());
+        
+        if(jTabbedPane1.getSelectedIndex() == 0 || jTabbedPane1.getSelectedIndex() == 1){
+            jLabel1.setText("Donor Information:");
+        }else if(jTabbedPane1.getSelectedIndex() == 2){
+            jLabel1.setText("Donation Information:");
+        }
+        */
     }
 
     /**
@@ -50,6 +68,8 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         IndividualTable = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         CorpOrgTable = new javax.swing.JTable();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -77,7 +97,7 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
 
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10"
+                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11"
             }
         ));
         jScrollPane1.setViewportView(IndividualTable);
@@ -95,6 +115,21 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         jScrollPane2.setViewportView(CorpOrgTable);
 
         jTabbedPane1.addTab("Corporation/Organization", jScrollPane2);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane4.setViewportView(jTable1);
+
+        jTabbedPane1.addTab("tab3", jScrollPane4);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -322,7 +357,9 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 
@@ -331,5 +368,48 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         String[] camp = {(String) arg};
         
         mod1.addRow(camp);
+        
+        //Pulling Campaigns
+        try {
+            try {
+                Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            } catch (ClassNotFoundException ex) { 
+                Logger.getLogger(Filter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            Connection con;
+            con = DriverManager.getConnection(
+                    DBcon.Connect(),
+                    DBcon.Login(), DBcon.Pass()); //(file path, db login, db password) - since it doesnt have a login, leave it blank
+          
+            Statement s = con.createStatement();  
+            System.out.println("Connection to DB established...");
+            
+            ResultSet rs = s.executeQuery("SELECT Fname, Minit, Lname,"
+                    + "Street, "
+                    + "City, State, ZipCode, "
+                    + "Phone, "
+                    + "EmailAddress,"
+                    + "UserStatus, Solicitation "
+                    + " FROM Individual left outer join Donor on (Individual.DonorID = Donor.DonorID)"); 
+            
+            
+            System.out.println("Is connection closed: " + con.isClosed());
+            System.out.println("Connection to DB established...");
+            while(rs.next()){
+                
+                String[] res = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),
+                rs.getString(7),rs.getString(8),rs.getString(9),rs.getString(10),rs.getString(11)};
+                
+                mod1.addRow(res);
+            }
+            
+            con.close();
+            System.out.println("Is connection closed: " + con.isClosed());
+        } catch (SQLException ex) {
+            Logger.getLogger(Filter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Filter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 }
