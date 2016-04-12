@@ -28,6 +28,10 @@ public abstract class AbDonor implements Donor{
         this.soli = sol;
     }
     
+    public AbDonor(){
+    
+    }
+    
     @Override
     public String toString(){
         return this.getAddr().toString() + " " + this.getPn().toString() + " " + this.getEmail() + " " + this.getStatus().name() + " " + this.isSoli();

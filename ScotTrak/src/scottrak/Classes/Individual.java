@@ -15,6 +15,10 @@ public class Individual extends AbDonor implements Donor {
     private String prefName;
     private String title;
     
+    public Individual(){
+        
+    }
+    
     public Individual(FullName n, String pfn, String t, Address ad, PhoneNumber p, String e, UserStatus Ustatus, boolean sol) {
         super(ad, p, e, Ustatus, sol);
         this.name = n;

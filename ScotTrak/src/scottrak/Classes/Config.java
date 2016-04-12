@@ -69,4 +69,17 @@ public class Config {
         return null;
     }
     
+    public static void searchUser(){
+    
+    }
+    
+    public static String getUsername(){
+        return "";
+    }
+    
+    public static char getPassword(){
+        char c = 0;
+        return c;
+    }
+    
 }

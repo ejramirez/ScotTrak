@@ -18,8 +18,8 @@ public class ScotTrak {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        new UserLogin().launchGUI();
         
-        Address addr = new Address();
     }
     
 }
