@@ -42,6 +42,7 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         
         this.setTitle("ScotTrak");
         jTextField1.setText("");
+        jTextField1.requestFocusInWindow();
         
         
         mod1 = (DefaultTableModel) IndividualTable.getModel();
@@ -109,6 +110,8 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -117,10 +120,16 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         jLabel3 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenu6 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -201,9 +210,13 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
             }
         });
 
-        jButton5.setText("Refresh");
+        jButton5.setText("Update");
 
         jLabel4.setText("Type to Search:");
+
+        jButton3.setText("Delete Donation");
+
+        jButton6.setText("New Donation");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -212,12 +225,16 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -230,7 +247,9 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(jButton4)
                 .addComponent(jButton5)
-                .addComponent(jLabel4))
+                .addComponent(jLabel4)
+                .addComponent(jButton3)
+                .addComponent(jButton6))
         );
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
@@ -304,19 +323,42 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         );
 
         jMenu1.setText("File");
+
+        jMenuItem1.setText("Exit");
+        jMenu1.add(jMenuItem1);
+
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
         jMenu3.setText("Reports");
+
+        jMenuItem2.setText("Generate Report");
+        jMenu3.add(jMenuItem2);
+
         jMenuBar1.add(jMenu3);
 
         jMenu5.setText("Database");
+
+        jMenuItem3.setText("Change Database");
+        jMenu5.add(jMenuItem3);
+
         jMenuBar1.add(jMenu5);
 
         jMenu4.setText("Tools");
+
+        jMenuItem4.setText("Settings");
+        jMenu4.add(jMenuItem4);
+
         jMenuBar1.add(jMenu4);
+
+        jMenu6.setText("Help");
+
+        jMenuItem5.setText("About");
+        jMenu6.add(jMenuItem5);
+
+        jMenuItem6.setText("Documentation");
+        jMenu6.add(jMenuItem6);
+
+        jMenuBar1.add(jMenu6);
 
         setJMenuBar(jMenuBar1);
 
@@ -345,30 +387,32 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
 
     private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
         // TODO add your handling code here:
-        TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(this.mod1);
-        IndividualTable.setRowSorter(rowSorter);
         
-        jTextField1.getDocument().addDocumentListener(new DocumentListener(){
+        //RowSorter
+        TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(this.mod1); //Change here
+        IndividualTable.setRowSorter(rowSorter); //Change here
+        
+        jTextField1.getDocument().addDocumentListener(new DocumentListener(){ 
             @Override
             public void insertUpdate(DocumentEvent e) {
-               String text = jTextField1.getText();
+               String text = jTextField1.getText(); 
 
                 if (text.trim().length() == 0) {
-                    rowSorter.setRowFilter(null);
+                    rowSorter.setRowFilter(null); //Change here
                 } else {
-                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text)); //Change here
                 }
                
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                String text = jTextField1.getText();
+                String text = jTextField1.getText(); 
 
                 if (text.trim().length() == 0) {
-                    rowSorter.setRowFilter(null);
+                    rowSorter.setRowFilter(null); //Change here
                 } else {
-                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text)); //Change here
                 }
                 
             }
@@ -379,6 +423,117 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
             }
             
         });
+        
+        
+        //RowSorter 1
+        TableRowSorter<TableModel> rowSorter1 = new TableRowSorter<>(this.mod2); //Change here
+        CorpOrgTable.setRowSorter(rowSorter1); //Change here
+        
+        jTextField1.getDocument().addDocumentListener(new DocumentListener(){ 
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+               String text = jTextField1.getText(); 
+
+                if (text.trim().length() == 0) {
+                    rowSorter1.setRowFilter(null); //Change here
+                } else {
+                    rowSorter1.setRowFilter(RowFilter.regexFilter("(?i)" + text)); //Change here
+                }
+               
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                String text = jTextField1.getText(); 
+
+                if (text.trim().length() == 0) {
+                    rowSorter1.setRowFilter(null); //Change here
+                } else {
+                    rowSorter1.setRowFilter(RowFilter.regexFilter("(?i)" + text)); //Change here
+                }
+                
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+            
+        });
+        
+        //RowSorter 2
+        TableRowSorter<TableModel> rowSorter2 = new TableRowSorter<>(this.mod3); //Change here
+        DonationsTable.setRowSorter(rowSorter2); //Change here
+        
+        jTextField1.getDocument().addDocumentListener(new DocumentListener(){ 
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+               String text = jTextField1.getText(); 
+
+                if (text.trim().length() == 0) {
+                    rowSorter2.setRowFilter(null); //Change here
+                } else {
+                    rowSorter2.setRowFilter(RowFilter.regexFilter("(?i)" + text)); //Change here
+                }
+               
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                String text = jTextField1.getText(); 
+
+                if (text.trim().length() == 0) {
+                    rowSorter2.setRowFilter(null); //Change here
+                } else {
+                    rowSorter2.setRowFilter(RowFilter.regexFilter("(?i)" + text)); //Change here
+                }
+                
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+            
+        });
+        
+        
+        //RowSorter 3
+        TableRowSorter<TableModel> rowSorter3 = new TableRowSorter<>(this.mod4); //Change here
+        jTable1.setRowSorter(rowSorter3); //Change here
+        
+        jTextField1.getDocument().addDocumentListener(new DocumentListener(){ 
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+               String text = jTextField1.getText(); 
+
+                if (text.trim().length() == 0) {
+                    rowSorter3.setRowFilter(null); //Change here
+                } else {
+                    rowSorter3.setRowFilter(RowFilter.regexFilter("(?i)" + text)); //Change here
+                }
+               
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                String text = jTextField1.getText(); 
+
+                if (text.trim().length() == 0) {
+                    rowSorter3.setRowFilter(null); //Change here
+                } else {
+                    rowSorter3.setRowFilter(RowFilter.regexFilter("(?i)" + text)); //Change here
+                }
+                
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+            
+        });
+        
     }//GEN-LAST:event_jTextField1KeyTyped
 
     /**
@@ -422,18 +577,26 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
     private javax.swing.JTable IndividualTable;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
