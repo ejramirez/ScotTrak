@@ -5,16 +5,22 @@
  */
 package GUI;
 
+import java.awt.print.PrinterException;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.MessageFormat;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -34,11 +40,16 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
     private DefaultTableModel mod3;
     private DefaultTableModel mod4;
     
+    
+    
     /**
      * Creates new form MainMenu
      */
     public MainMenu() {
         initComponents();
+        
+        AddDonor.setVisible(false);
+        
         
         this.setTitle("ScotTrak");
         jTextField1.setText("");
@@ -50,38 +61,36 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         mod3 = (DefaultTableModel) DonationsTable.getModel();
         mod4 = (DefaultTableModel) jTable1.getModel();
         
-        /*
-        DBcon db = new DBcon();
-        db.View("SELECT Fname, Minit, Lname,"
-                + "Street, "
-                + "City, State, ZipCode, "
-                + "Phone, "
-                + "EmailAddress,"
-                + "UserStatus, Solicitation "
-                + " FROM Individual left outer join Donor on (Individual.DonorID = Donor.DonorID)",new DBaction(){
-                    @Override
-                    public void DBactRS(ResultSet rs) {
-                        try {
-                            
-                            String[] res = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),
-                                rs.getString(7),rs.getString(8),rs.getString(9),rs.getString(10),rs.getString(11)};
-                            
-                            mod1.addRow(res);
-                            
-                        } catch (SQLException ex) {
-                            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
-                    @Override
-                    public void DBactSRS(Statement s) {
-                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                    }
-                    
-                });
-        */
         
     }
+    
+    
+    public void toExcel(JTable table, File file){
+		
+            try{
+			TableModel model = table.getModel();
+			FileWriter excel = new FileWriter(file);
+
+			for(int i = 0; i < model.getColumnCount(); i++){
+				excel.write(model.getColumnName(i) + "\t");
+			}
+                        
+                        
+			excel.write("\n");
+
+                        System.out.println(model.getValueAt(1,0).toString());
+                        
+			for(int i=1; i < model.getRowCount(); i++) {
+				for(int j=1; j < model.getColumnCount(); j++) {
+					excel.write(model.getValueAt(i,j).toString()+"\t");
+				}
+				excel.write("\n");
+			}
+
+			excel.close();
+		}catch(IOException e){ System.out.println(e); }
+        
+	}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -118,8 +127,12 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        AddDonor = new javax.swing.JPanel();
+        jButton7 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -193,6 +206,11 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         );
 
         jButton1.setText("New Donor");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Delete Donor");
 
@@ -322,7 +340,47 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
                 .addContainerGap())
         );
 
+        jButton7.setText("Cancel");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout AddDonorLayout = new javax.swing.GroupLayout(AddDonor);
+        AddDonor.setLayout(AddDonorLayout);
+        AddDonorLayout.setHorizontalGroup(
+            AddDonorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AddDonorLayout.createSequentialGroup()
+                .addContainerGap(422, Short.MAX_VALUE)
+                .addComponent(jButton7)
+                .addContainerGap())
+        );
+        AddDonorLayout.setVerticalGroup(
+            AddDonorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AddDonorLayout.createSequentialGroup()
+                .addContainerGap(364, Short.MAX_VALUE)
+                .addComponent(jButton7)
+                .addContainerGap())
+        );
+
         jMenu1.setText("File");
+
+        jMenuItem7.setText("Print");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem7);
+
+        jMenuItem8.setText("Export");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem8);
 
         jMenuItem1.setText("Exit");
         jMenu1.add(jMenuItem1);
@@ -367,12 +425,22 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(AddDonor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(5, 5, 5))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(AddDonor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         pack();
@@ -536,6 +604,62 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         
     }//GEN-LAST:event_jTextField1KeyTyped
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        System.out.println("Input Detected.");
+        
+        this.jPanel1.setVisible(false);
+        AddDonor.setVisible(true);
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        AddDonor.setVisible(false);
+        this.jPanel1.setVisible(true);
+        
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        // TODO add your handling code here:
+        MessageFormat header = new MessageFormat("Individuals Table for all Campaigns");
+        MessageFormat footer = null;
+        
+        try {
+            /* print the table */
+            boolean complete = IndividualTable.print(JTable.PrintMode.FIT_WIDTH, header, footer,
+                                                 true, null,
+                                                 true, null);
+ 
+            /* if printing completes */
+            if (complete) {
+                /* show a success message */
+                JOptionPane.showMessageDialog(this,
+                                              "Printing Complete",
+                                              "Printing Result",
+                                              JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                /* show a message indicating that printing was cancelled */
+                JOptionPane.showMessageDialog(this,
+                                              "Printing Cancelled",
+                                              "Printing Result",
+                                              JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (PrinterException pe) {
+            /* Printing failed, report to the user */
+            JOptionPane.showMessageDialog(this,
+                                          "Printing Failed: " + pe.getMessage(),
+                                          "Printing Result",
+                                          JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        // TODO add your handling code here:
+        this.toExcel(IndividualTable, new File("C:\\Users\\Eric\\Documents\\output.xlsx"));
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -572,6 +696,7 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel AddDonor;
     private javax.swing.JTable CorpOrgTable;
     private javax.swing.JTable DonationsTable;
     private javax.swing.JTable IndividualTable;
@@ -581,6 +706,7 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -597,6 +723,8 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

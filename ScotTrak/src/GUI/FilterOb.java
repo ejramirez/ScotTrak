@@ -30,4 +30,12 @@ public class FilterOb extends Observable {
         notifyObservers(this.camp);
     }
     
+    public String getCamp(){
+        return this.camp;
+    }
+    
+    public void noChange(){
+        notifyObservers(this.camp);
+    }
+    
 }
