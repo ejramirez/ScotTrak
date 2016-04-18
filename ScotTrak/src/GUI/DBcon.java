@@ -30,9 +30,23 @@ public class DBcon {
     */
     
     private DBaction dba;
+    private static Connection connection = null;
     
     public DBcon(){
     
+    }
+    
+    public static Connection getConnection(){
+        
+        try{
+        
+            connection = DriverManager.getConnection(DBcon.Connect());
+            System.out.println("CONNECTION SUCCESSFUL.");
+            
+        }catch(Exception ex){
+        
+        }
+        return connection;
     }
     
     public void View(String sql, DBaction d){

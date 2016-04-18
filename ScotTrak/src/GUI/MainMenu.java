@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,6 +20,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
@@ -40,20 +42,36 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
     private DefaultTableModel mod3;
     private DefaultTableModel mod4;
     
+    private FilterOb ob;
+    
+    private static Statement st = null;
+    private static ResultSet rs = null;
+    private static PreparedStatement pst = null;
+    private static Connection connection = DBcon.getConnection();
     
     
     /**
      * Creates new form MainMenu
      */
     public MainMenu() {
+        //this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         initComponents();
         
-        AddDonor.setVisible(false);
+        this.jPanel4.setVisible(true);
+        
+        this.jPanel5.setVisible(false);
+        this.jPanel6.setVisible(false);
         
         
         this.setTitle("ScotTrak");
         jTextField1.setText("");
         jTextField1.requestFocusInWindow();
+        
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jTextField4.setText("");
+        jTextField5.setText("");
+        jTextField6.setText("");
         
         
         mod1 = (DefaultTableModel) IndividualTable.getModel();
@@ -62,6 +80,10 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         mod4 = (DefaultTableModel) jTable1.getModel();
         
         
+    }
+    
+    public void setFObModel(FilterOb o){
+        this.ob = o;
     }
     
     
@@ -122,13 +144,21 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         jButton3 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        AddDonor = new javax.swing.JPanel();
-        jButton7 = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jButton8 = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jButton9 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        jTextField4 = new javax.swing.JTextField();
+        jTextField5 = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jTextField6 = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
@@ -228,7 +258,12 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
             }
         });
 
-        jButton5.setText("Update");
+        jButton5.setText("Clear");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Type to Search:");
 
@@ -252,7 +287,7 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
                 .addComponent(jButton4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -270,12 +305,18 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
                 .addComponent(jButton6))
         );
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jLabel1.setText("Donor Information:");
+        jLabel2.setText("Filter Menu:");
 
-        jLabel2.setText("Donor ID:");
+        jLabel3.setText("Set Campaign:");
 
-        jLabel3.setText("jLabel3");
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jButton8.setText("Apply");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -283,38 +324,117 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addContainerGap(802, Short.MAX_VALUE))
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton8)
+                .addGap(97, 97, 97))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addContainerGap(170, Short.MAX_VALUE))
+                    .addComponent(jLabel3)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
+                .addComponent(jButton8)
+                .addGap(28, 28, 28))
         );
 
-        jScrollPane3.setViewportView(jPanel5);
+        jButton9.setText("Insert");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Full Name:");
+
+        jLabel5.setText("Street:");
+
+        jTextField2.setText("jTextField2");
+
+        jTextField3.setText("jTextField3");
+
+        jTextField4.setText("jTextField4");
+
+        jTextField5.setText("jTextField5");
+
+        jLabel6.setText("Phone:");
+
+        jTextField6.setText("jTextField6");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton9))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTextField5)
+                            .addComponent(jTextField6))
+                        .addGap(0, 552, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
+                .addComponent(jButton9)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3))
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -337,30 +457,6 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        jButton7.setText("Cancel");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout AddDonorLayout = new javax.swing.GroupLayout(AddDonor);
-        AddDonor.setLayout(AddDonorLayout);
-        AddDonorLayout.setHorizontalGroup(
-            AddDonorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AddDonorLayout.createSequentialGroup()
-                .addContainerGap(422, Short.MAX_VALUE)
-                .addComponent(jButton7)
-                .addContainerGap())
-        );
-        AddDonorLayout.setVerticalGroup(
-            AddDonorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, AddDonorLayout.createSequentialGroup()
-                .addContainerGap(364, Short.MAX_VALUE)
-                .addComponent(jButton7)
                 .addContainerGap())
         );
 
@@ -425,22 +521,12 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(AddDonor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(5, 5, 5))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(AddDonor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         pack();
@@ -449,8 +535,8 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         
-        this.setVisible(false);
-        new Filter().setVisible(true);
+        this.jPanel6.setVisible(false);
+        this.jPanel5.setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
@@ -606,19 +692,10 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        System.out.println("Input Detected.");
-        
-        this.jPanel1.setVisible(false);
-        AddDonor.setVisible(true);
+        this.jPanel5.setVisible(false);
+        this.jPanel6.setVisible(true);
         
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
-        AddDonor.setVisible(false);
-        this.jPanel1.setVisible(true);
-        
-    }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         // TODO add your handling code here:
@@ -660,6 +737,110 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         this.toExcel(IndividualTable, new File("C:\\Users\\Eric\\Documents\\output.xlsx"));
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+
+        System.out.println(jComboBox1.getSelectedItem().toString());
+        this.setFObModel(new FilterOb());
+        this.ob.addObserver(this);
+        this.ob.setCamp(jComboBox1.getSelectedItem().toString());
+
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+        
+        // Base Inserts off this.
+        
+        try{
+            
+            String sql1 = "INSERT INTO DONOR(Street,Phone) values(?,?)";
+            String sql2 = "INSERT INTO Individual(DonorID, Fname, Minit, Lname) values(?,?,?,?)";
+            
+            
+            pst = connection.prepareStatement(sql1);
+            pst.setString(1, jTextField5.getText());
+            pst.setString(2, jTextField6.getText());
+            pst.execute();
+            
+            String dID = "SELECT DonorID FROM Donor WHERE Donor.Street like '" + jTextField5.getText() + "' "
+                    + "AND Donor.Phone like '" + jTextField6.getText() + "' ";
+            
+            pst = connection.prepareStatement(dID);
+            rs = pst.executeQuery();
+            
+            String donorID = null;
+            
+            while(rs.next()){
+            
+                System.out.println("DonorID is: " + rs.getString(1));
+                donorID = rs.getString(1);
+                
+            }
+            
+            pst = connection.prepareStatement(sql2);
+            pst.setString(1, donorID);
+            pst.setString(2, jTextField2.getText());
+            pst.setString(3,jTextField3.getText());
+            pst.setString(4,jTextField2.getText());
+            pst.execute();
+            
+            System.out.println("INSERT SUCCESSFUL");
+        }catch(Exception ex){
+            System.out.println(ex.getLocalizedMessage().toString());
+        }
+        
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jTextField4.setText("");
+        jTextField5.setText("");
+        jTextField6.setText("");
+        
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        
+        if (mod1.getRowCount() > 0) {
+            for (int i = mod1.getRowCount() - 1; i > -1; i--) {
+                mod1.removeRow(i);
+            }
+        }
+            
+        if (mod2.getRowCount() > 0) {
+            for (int i = mod2.getRowCount() - 1; i > -1; i--) {
+                mod2.removeRow(i);
+            }
+        
+        }
+        
+        if (mod3.getRowCount() > 0) {
+            for (int i = mod3.getRowCount() - 1; i > -1; i--) {
+                mod3.removeRow(i);
+            }
+            
+        }    
+            
+         if (mod4.getRowCount() > 0) {
+            for (int i = mod4.getRowCount() - 1; i > -1; i--) {
+                mod4.removeRow(i);
+            }
+            
+        }
+         
+         System.out.println("Tables Cleared.");
+           
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    
+    
+    /*
+        System.out.println(jComboBox1.getSelectedItem().toString());
+        this.setFObModel(new FilterOb());
+        this.ob.addObserver(this);
+        this.ob.setCamp(jComboBox1.getSelectedItem().toString());
+    */
+    
     /**
      * @param args the command line arguments
      */
@@ -696,7 +877,6 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel AddDonor;
     private javax.swing.JTable CorpOrgTable;
     private javax.swing.JTable DonationsTable;
     private javax.swing.JTable IndividualTable;
@@ -706,11 +886,15 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
@@ -730,14 +914,19 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField jTextField6;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -746,111 +935,102 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         
         mod1.addRow(camp);
         
-        DBcon db = new DBcon();
-        db.View("SELECT Fname, Minit, Lname,"
+        
+        // MOD 1
+        try{
+            
+            pst = connection.prepareStatement("SELECT Fname, Minit, Lname,"
                 + "Street, "
                 + "City, State, ZipCode, "
                 + "Phone, "
                 + "EmailAddress,"
                 + "UserStatus, Solicitation "
-                + " FROM Individual left outer join Donor on (Individual.DonorID = Donor.DonorID)",new DBaction(){
-                    @Override
-                    public void DBactRS(ResultSet rs) {
-                        try {
-                            
-                            String[] res = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),
+                + " FROM Individual left outer join Donor on (Individual.DonorID = Donor.DonorID)");
+            
+            rs = pst.executeQuery();
+            
+            while(rs.next()){
+                
+                String[] res = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),
                                 rs.getString(7),rs.getString(8),rs.getString(9),rs.getString(10),rs.getString(11)};
                             
                             mod1.addRow(res);
-                            
-                        } catch (SQLException ex) {
-                            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
-                    @Override
-                    public void DBactSRS(Statement s) {
-                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                    }
-                    
-                });
+                
+            }
         
+        }catch(Exception ex){
+            System.out.println(ex.getLocalizedMessage().toString());
+        }
         
-        db.View("SELECT OrgName, PrimaryContact,"
+        // MOD 2
+        try{
+            
+            pst = connection.prepareStatement("SELECT OrgName, PrimaryContact,"
                     + "Street, "
                     + "City, State, ZipCode,"
                     + "Phone, "
                     + "EmailAddress,"
                     + "UserStatus, Solicitation"
-                    + " FROM Corporate_Organization left outer join Donor on (Corporate_Organization.DonorID = Donor.DonorID)",new DBaction(){
-                    @Override
-                    public void DBactRS(ResultSet rs) {
-                        try {
-                            
-                            String[] res = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),
+                    + " FROM Corporate_Organization left outer join Donor on (Corporate_Organization.DonorID = Donor.DonorID)");
+            
+            rs = pst.executeQuery();
+            
+            while(rs.next()){
+                
+                String[] res = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),
                                 rs.getString(7),rs.getString(8),rs.getString(9),rs.getString(10)};
                             
                             mod2.addRow(res);
-                            
-                        } catch (SQLException ex) {
-                            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
-                    @Override
-                    public void DBactSRS(Statement s) {
-                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                    }
-                    
-                });
+                
+            }
         
+        }catch(Exception ex){
+            System.out.println(ex.getLocalizedMessage().toString());
+        }
         
-        db.View("SELECT I.Title, I.Fname, I.Minit, I.Lname, I.PreferredHouseholdName,"
+        // MOD 3
+        try{
+            
+            pst = connection.prepareStatement("SELECT I.Title, I.Fname, I.Minit, I.Lname, I.PreferredHouseholdName,"
                         + " D.CampaignTitle, D.Amount, D.DDate, D.Notes"
-                        + " FROM Individual as I left outer join Donations as D on (I.DonorID = D.DonorID)",new DBaction(){
-                    @Override
-                    public void DBactRS(ResultSet rs) {
-                        try {
-                            
-                            String[] res = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),
+                        + " FROM Individual as I left outer join Donations as D on (I.DonorID = D.DonorID)");
+            
+            rs = pst.executeQuery();
+            
+            while(rs.next()){
+                
+                String[] res = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),
                                 rs.getString(7),rs.getString(8),rs.getString(9)};
                             
                             mod3.addRow(res);
-                            
-                        } catch (SQLException ex) {
-                            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
-                    @Override
-                    public void DBactSRS(Statement s) {
-                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                    }
-                    
-                });
+                
+            }
         
-        db.View("SELECT C.OrgName, C.PrimaryContact,"
+        }catch(Exception ex){
+            System.out.println(ex.getLocalizedMessage().toString());
+        }
+        
+        // MOD 4
+        try{
+            
+            pst = connection.prepareStatement("SELECT C.OrgName, C.PrimaryContact,"
                         + " D.CampaignTitle, D.Amount, D.DDate, D.Notes"
-                        + " FROM Corporate_Organization as C left outer join Donations as D on (C.DonorID = D.DonorID)",new DBaction(){
-                    @Override
-                    public void DBactRS(ResultSet rs) {
-                        try {
-                            
-                            String[] res = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)};
+                        + " FROM Corporate_Organization as C left outer join Donations as D on (C.DonorID = D.DonorID)");
+            
+            rs = pst.executeQuery();
+            
+            while(rs.next()){
+                
+                String[] res = {rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)};
                             
                             mod4.addRow(res);
-                            
-                        } catch (SQLException ex) {
-                            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
-                    @Override
-                    public void DBactSRS(Statement s) {
-                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                    }
-                    
-                });
+                
+            }
+        
+        }catch(Exception ex){
+            System.out.println(ex.getLocalizedMessage().toString());
+        }
+        
         
     }
 }
