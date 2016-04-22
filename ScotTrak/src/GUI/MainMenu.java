@@ -57,12 +57,6 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         //this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         initComponents();
         
-        this.jPanel4.setVisible(true);
-        
-        this.jPanel5.setVisible(false);
-        this.jPanel6.setVisible(false);
-        
-        
         this.setTitle("ScotTrak");
         jTextField1.setText("");
         jTextField1.requestFocusInWindow();
@@ -135,20 +129,21 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         jScrollPane5 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
-        jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        jScrollPane3 = new javax.swing.JScrollPane();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jButton8 = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
         jPanel6 = new javax.swing.JPanel();
         jButton9 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -235,26 +230,12 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
             .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
 
-        jButton1.setText("New Donor");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         jButton2.setText("Delete Donor");
 
         jTextField1.setText("jTextField1");
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextField1KeyTyped(evt);
-            }
-        });
-
-        jButton4.setText("Filter");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
             }
         });
 
@@ -276,16 +257,13 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(100, 100, 100)
                 .addComponent(jButton6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(79, 79, 79)
                 .addComponent(jButton5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addComponent(jLabel4)
@@ -295,10 +273,8 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jButton1)
                 .addComponent(jButton2)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jButton4)
                 .addComponent(jButton5)
                 .addComponent(jLabel4)
                 .addComponent(jButton3)
@@ -344,10 +320,14 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 154, Short.MAX_VALUE)
                 .addComponent(jButton8)
                 .addGap(28, 28, 28))
         );
+
+        jScrollPane3.setViewportView(jPanel5);
+
+        jTabbedPane2.addTab("Filter", jScrollPane3);
 
         jButton9.setText("Insert");
         jButton9.addActionListener(new java.awt.event.ActionListener() {
@@ -417,24 +397,28 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 132, Short.MAX_VALUE)
                 .addComponent(jButton9)
                 .addContainerGap())
         );
+
+        jScrollPane6.setViewportView(jPanel6);
+
+        jTabbedPane2.addTab("New Donor", jScrollPane6);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 891, Short.MAX_VALUE)
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 891, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 225, Short.MAX_VALUE)
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -531,13 +515,6 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-        
-        this.jPanel6.setVisible(false);
-        this.jPanel5.setVisible(true);
-    }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
         // TODO add your handling code here:
@@ -690,13 +667,6 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         
     }//GEN-LAST:event_jTextField1KeyTyped
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        this.jPanel5.setVisible(false);
-        this.jPanel6.setVisible(true);
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         // TODO add your handling code here:
         MessageFormat header = new MessageFormat("Individuals Table for all Campaigns");
@@ -747,6 +717,15 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
 
     }//GEN-LAST:event_jButton8ActionPerformed
 
+    /*
+    
+    System.out.println(jComboBox1.getSelectedItem().toString());
+        this.setFObModel(new FilterOb());
+        this.ob.addObserver(this);
+        this.ob.setCamp(jComboBox1.getSelectedItem().toString());
+    
+    */
+    
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
         
@@ -798,6 +777,56 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
         
     }//GEN-LAST:event_jButton9ActionPerformed
 
+    /*
+    
+    // Base Inserts off this.
+        
+        try{
+            
+            String sql1 = "INSERT INTO DONOR(Street,Phone) values(?,?)";
+            String sql2 = "INSERT INTO Individual(DonorID, Fname, Minit, Lname) values(?,?,?,?)";
+            
+            
+            pst = connection.prepareStatement(sql1);
+            pst.setString(1, jTextField5.getText());
+            pst.setString(2, jTextField6.getText());
+            pst.execute();
+            
+            String dID = "SELECT DonorID FROM Donor WHERE Donor.Street like '" + jTextField5.getText() + "' "
+                    + "AND Donor.Phone like '" + jTextField6.getText() + "' ";
+            
+            pst = connection.prepareStatement(dID);
+            rs = pst.executeQuery();
+            
+            String donorID = null;
+            
+            while(rs.next()){
+            
+                System.out.println("DonorID is: " + rs.getString(1));
+                donorID = rs.getString(1);
+                
+            }
+            
+            pst = connection.prepareStatement(sql2);
+            pst.setString(1, donorID);
+            pst.setString(2, jTextField2.getText());
+            pst.setString(3,jTextField3.getText());
+            pst.setString(4,jTextField2.getText());
+            pst.execute();
+            
+            System.out.println("INSERT SUCCESSFUL");
+        }catch(Exception ex){
+            System.out.println(ex.getLocalizedMessage().toString());
+        }
+        
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jTextField4.setText("");
+        jTextField5.setText("");
+        jTextField6.setText("");
+    
+    */
+    
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         
@@ -880,10 +909,8 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
     private javax.swing.JTable CorpOrgTable;
     private javax.swing.JTable DonationsTable;
     private javax.swing.JTable IndividualTable;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton8;
@@ -917,9 +944,12 @@ public class MainMenu extends javax.swing.JFrame implements Observer{
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
